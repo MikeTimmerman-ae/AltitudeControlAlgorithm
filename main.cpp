@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string>
 
+#include <qpOASES.hpp>
 #include <Eigen/Dense>
 #include <Eigen/SparseCore>
 
@@ -11,6 +12,7 @@
 
 using namespace std;
 using namespace Eigen;
+using namespace qpOASES;
 
 
 int main(int argc, char const *argv[])
