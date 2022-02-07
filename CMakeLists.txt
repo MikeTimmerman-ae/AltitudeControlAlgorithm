@@ -6,20 +6,23 @@ enable_testing()
 
 add_executable(ControlSoftware main.cpp)
 
+add_subdirectory(src)
 add_subdirectory(libraries/eigen)
 add_subdirectory(libraries/qpOASES)
 
 target_include_directories(${PROJECT_NAME}
+    PUBLIC src
     PUBLIC libraries/eigen
     PUBLIC libraries/qpOASES/include
 )
 
 target_link_directories(${PROJECT_NAME}
+    PUBLIC src
     PUBLIC libraries/eigen
-    PRIVATE libraries/qpOASES
+    PUBLIC libraries/qpOASES
 )
 
-target_link_libraries(${PROJECT_NAME} eigen qpOASES)
+target_link_libraries(${PROJECT_NAME} eigen qpOASES controller)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

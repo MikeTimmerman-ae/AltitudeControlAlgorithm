@@ -7,7 +7,10 @@
 	"settings": {
 		"files.associations": {
 			"dense": "cpp",
-			"sparsecore": "cpp"
+			"sparsecore": "cpp",
+			"vector": "cpp",
+			"string": "cpp",
+			"iostream": "cpp"
 		}
 	}
 }

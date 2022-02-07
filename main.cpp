@@ -1,22 +1,13 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <math.h>
-#include <string>
+#include "header.h"
 
-#include <qpOASES.hpp>
-#include <Eigen/Dense>
-#include <Eigen/SparseCore>
-
-#define PI 3.14159265
-
-using namespace std;
-using namespace Eigen;
-using namespace qpOASES;
 
 
 int main(int argc, char const *argv[])
 {
     /* code */
+    my_class MyClass;
+
+    MyClass.do_something();
+
     return 0;
 }
