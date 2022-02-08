@@ -35,3 +35,18 @@ target_link_directories(dynamics
 )
 
 target_link_libraries(dynamics eigen)
+
+
+# Add rbf.cpp
+
+add_library(rbf rbf.cpp)
+
+target_include_directories(rbf
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_directories(rbf
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_libraries(rbf eigen)
