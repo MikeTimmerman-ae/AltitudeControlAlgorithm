@@ -12,7 +12,14 @@
 			"string": "cpp",
 			"iostream": "cpp",
 			"*.tcc": "cpp",
-			"ostream": "cpp"
+			"ostream": "cpp",
+			"random": "cpp",
+			"array": "cpp",
+			"string_view": "cpp",
+			"hash_map": "cpp",
+			"initializer_list": "cpp",
+			"utility": "cpp",
+			"valarray": "cpp"
 		}
 	}
 }

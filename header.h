@@ -20,10 +20,7 @@
 #include "include/controller.h"     // #include src code
 #include "include/dynamics.h"
 #include "include/rbf.h"
-
-#define PI 3.14159265               // #define constants
+#include "include/parameters.h"
 
 using namespace std;                // using namespaces
 using namespace Eigen;
-using namespace qpOASES;
-using namespace N;
