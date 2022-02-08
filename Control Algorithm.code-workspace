@@ -10,7 +10,9 @@
 			"sparsecore": "cpp",
 			"vector": "cpp",
 			"string": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"*.tcc": "cpp",
+			"ostream": "cpp"
 		}
 	}
 }

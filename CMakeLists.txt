@@ -22,7 +22,7 @@ target_link_directories(${PROJECT_NAME}
     PUBLIC libraries/qpOASES
 )
 
-target_link_libraries(${PROJECT_NAME} eigen qpOASES controller)
+target_link_libraries(${PROJECT_NAME} eigen qpOASES controller dynamics)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

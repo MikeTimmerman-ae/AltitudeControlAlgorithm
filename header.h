@@ -18,6 +18,7 @@
 #include <Eigen/SparseCore>
 
 #include "include/controller.h"     // #include src code
+#include "include/dynamics.h"
 
 #define PI 3.14159265               // #define constants
 
