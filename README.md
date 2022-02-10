@@ -1,2 +1,2 @@
-# Rocket Altitude Control Algorithm
-Model predictive control algorithm which controls the altitude of a sounding rocket
+# Altitude Control Algorithm
+Model predictive control algorithm which controls altitude
