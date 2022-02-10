@@ -20,6 +20,7 @@
 #include "include/controller.h"     // #include src code
 #include "include/dynamics.h"
 #include "include/rbf.h"
+#include "include/helpers.h"
 #include "include/parameters.h"
 
 using namespace std;                // using namespaces

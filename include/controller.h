@@ -22,7 +22,7 @@ class controller
 {
     private:
         // Private class members
-        int Np, p;
+        int Np, p, n, m;
         double Q, d;
         MatrixXd Ab;
         MatrixXd Xub;
@@ -37,16 +37,16 @@ class controller
         void initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, double QN);
     public:
         // Constructors
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, Matrix<double, P::n_states, P::n_prediction> &Xub_par,
-            Matrix<double, P::n_control_input, P::n_prediction> &Ulb_par, Matrix<double, P::n_control_input, P::n_prediction> &Uub_par,
-            Matrix<double, P::n_control_input * P::n_prediction , 1> &ulin_par, Matrix<double, P::n_output * P::n_prediction , 1> &qlin);
+        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, Matrix<double, P::n_states_lift * P::n_prediction, 1> &Xub_par,
+            Matrix<double, P::n_control_input * P::n_prediction, 1> &Ulb_par, Matrix<double, P::n_control_input * P::n_prediction, 1> &Uub_par,
+            Matrix<double, P::n_control_input * P::n_prediction, 1> &ulin_par, Matrix<double, P::n_output * P::n_prediction , 1> &qlin);
         
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, int Npred, Matrix<double, P::n_states, 1> &Xub_par,
+        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, int Npred, Matrix<double, P::n_states_lift, 1> &Xub_par,
             Matrix<double, P::n_control_input, 1> &Ulb_par, Matrix<double, P::n_control_input, 1> &Uub_par,
             Matrix<double, P::n_control_input, 1> &ulin_par, Matrix<double, P::n_output, 1> &qlin);
         
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, int Npred,
-            double Ulb_par, double Uub_par, double Xub_par, double ulin_par, double qlin_par);
+        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, int Npred, double Xub_par,
+            double Ulb_par, double Uub_par, double ulin_par, double qlin_par);
         
         // Public class method
         double getControlInput(VectorXd &x0, double yrr);

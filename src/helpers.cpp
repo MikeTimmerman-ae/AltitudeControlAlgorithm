@@ -11,6 +11,7 @@
 #include <vector>                   // #include directives
 #include <string>
 #include <fstream>
+#include <iostream>
 
 #include <qpOASES.hpp>              // #include modules
 #include <Eigen/Dense>

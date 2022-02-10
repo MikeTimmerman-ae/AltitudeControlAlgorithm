@@ -1,0 +1,3 @@
+rbf type: thinplate
+approximation level: midway
+number of rbf: 100

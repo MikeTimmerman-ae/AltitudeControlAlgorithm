@@ -4,19 +4,30 @@
 
 int main(int argc, char const *argv[])
 {
-    /* Initiate Rocket Dynamics */
+    /* Initiate Actualt 1D Rocket Dynamics */
     dynamics MyRocket;
 
-    MatrixXd A(P::n_states, P::n_states);
-    MatrixXd B(P::n_states, P::n_control_input);
-    SparseMatrix<double> C(1, P::n_states);
+    /* Initialize lifting mapping function */
+    MatrixXd cent = loadFile("../data/cent.csv", P::n_states, P::n_rbf);
+    string rbf_type = "thinplate";
+    rbf liftFun(cent, rbf_type);
+
+    /* Configure Controller*/
+    MatrixXd A = loadFile("../data/Alift.csv", P::n_states_lift, P::n_states_lift);              // x_dot = A*x + B*u
+    MatrixXd B = loadFile("../data/Blift.csv", P::n_states_lift, P::n_control_input);
+    SparseMatrix<double> C(P::n_output, P::n_states_lift); C.insert(0, 0) = 1;                             // y = C*x
+
     double d = 0.0;
     double Q = 1.0;
     double R = 0.01;
+
     int Npred = 100;
-    double Xub = 3000; 
+
+    double Xub = 3000;
+
     double Ulb = 0; 
     double Uub = 1; 
+
     double ulin = 0;
     double qlin = 0;
 

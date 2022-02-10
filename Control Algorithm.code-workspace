@@ -19,7 +19,10 @@
 			"hash_map": "cpp",
 			"initializer_list": "cpp",
 			"utility": "cpp",
-			"valarray": "cpp"
+			"valarray": "cpp",
+			"compare": "cpp",
+			"concepts": "cpp",
+			"functional": "cpp"
 		}
 	}
 }
