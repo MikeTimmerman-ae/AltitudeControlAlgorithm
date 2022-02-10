@@ -6,7 +6,8 @@
  */
 
 #include "../include/parameters.h"  // #include header
-#include "../include/controller.h"  // #include header
+#include "../include/controller.h"
+#include "../include/helpers.h"
 
 #include <iostream>                 // #include directives
 #include <vector>
@@ -23,8 +24,8 @@ using namespace Eigen;
 
 controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, Matrix<double, P::n_states, P::n_prediction> &Xub_par,
     Matrix<double, P::n_control_input, P::n_prediction> &Ulb_par, Matrix<double, P::n_control_input, P::n_prediction> &Uub_par,
-    Matrix<double, P::n_control_input * P::n_prediction , 1> &ulin_par, Matrix<double, P::n_output * P::n_prediction , 1> &qlin)
-{ 
+    Matrix<double, P::n_control_input * P::n_prediction , 1> &ulin_par, Matrix<double, P::n_output * P::n_prediction , 1> &qlin_par)
+{
     Np = P::n_prediction;               // Number of Control Horizon points
     p = P::n_output;                    // Number of outputs
 
@@ -32,8 +33,10 @@ controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double
     Ulb = Ulb_par; Uub = Uub_par;       // Save control bounds as controller paramters
     d = d_par; Q = Q_par;               // Save wieght Q and affine term in the dynamics d as parameters
     ulin = ulin_par;                    // Save linear term in the cost as controller parameter
+    MatrixXd qlin = qlin_par;           // Save quadratic term in the cost
 
-    
+    // Initialize controller
+    initialize(A, B, qlin, R, QN);
 }
 
 controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, int Npred, Matrix<double, P::n_states, 1> &Xub_par,
@@ -57,9 +60,10 @@ controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double
     ulin = ulin_par.replicate(Np, 1);
 
     // Quadratic term in cost; convert matrix from p x 1 --> p*Np x 1
-    VectorXd qlin = qlin_par.replicate(Np, 1);
+    MatrixXd qlin = qlin_par.replicate(Np, 1);
 
-
+    // Initialize controller
+    initialize(A, B, qlin, R, QN);
 }
 
 controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, int Npred,
@@ -84,18 +88,20 @@ controller::controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double
     ulin = VectorXd::Constant(m*Np, ulin_par);
 
     // Quadratic term in cost; convert matrix from m x 1 --> p*Np x 1
-    VectorXd qlin = VectorXd::Constant(p*Np, qlin_par);
+    MatrixXd qlin = MatrixXd::Constant(p*Np, 1, qlin_par);
 
-
+    // Initialize controller
+    initialize(A, B, qlin, R, QN);
 }
 
 void controller::initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, double QN) {
-    /* Initialize Controller*/
+    /* Initialize Controller */
 
     const int n = P::n_states_lift;     // Number of states
     const int m = P::n_control_input;   // Number of control inputs
 
     VectorXd x0(n);                     // Dummy Variable
+
 
     // Create MPC matrices Ab and Bb
     Ab = MatrixXd(Np*n, n); Ab(seq(0, n-1), seq(0, n-1)) = A;
@@ -106,6 +112,7 @@ void controller::initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, 
         Bb(seq(i*n, (i+1)*n-1), seq(i*m, (i+1)*m-1)) = B;
     }      
     
+
     // Build the controller (Matrices Qb, Cb, Rb --> M1 and M2)
     SparseMatrix<double> Qb(p*Np,p*Np);
     for (int i = 0; i < Np*p; ++i) {Qb.insert(i, i) = Q;}
@@ -130,8 +137,10 @@ void controller::initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, 
     SparseMatrix<double> Rb(Np,Np);
     for (int i = 0; i < Np; ++i) {Rb.insert(i, i) = R;}
 
+
     M1 = 2* ( ( Bb.transpose()* (Cb.transpose()*Qb*Cb) ) *Ab );
     M2 = (-2* (Qb*Cb) *Bb).transpose();
+
 
     // Bounds on the states
     MatrixXd Aineq_temp(n*Np*2, Np);
@@ -148,17 +157,21 @@ void controller::initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, 
     MatrixXd g = (2*x0.transpose()*Ab.transpose()*Cb.transpose()*Qb*Cb*Bb).transpose() + ulin + Bb.transpose()*(Cb.transpose()*qlin);
     H = (H+H.transpose())/2;
     
-    // Initialize controller with qpOASES
+
+    // Initialize qpOASES QProblem
+    // Standard problem parameters
     int nV = Np;
     int nC = 2*Np;
     Qp = qpOASES::QProblem(nV, nC);
     qpOASES::int_t nWSR = 1000;
     
+    // Set solver options
     qpOASES::Options options;
     options.setToMPC();
     options.printLevel = qpOASES::PL_LOW;
     Qp.setOptions( options );
 
+    // Convert data to correct datatype
     convertMatrixtoQpArray(H_qp, H, nV, nV); 
     qpOASES::real_t g_qp[nV]; convertMatrixtoQpArray(g_qp, g, nV, 1);
     qpOASES::real_t Aineq_qp[nC*nV]; convertMatrixtoQpArray(Aineq_qp, Aineq, nC, nV);
@@ -169,7 +182,6 @@ void controller::initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, 
     qpOASES::SymDenseMat *Hsd = new qpOASES::SymDenseMat(100, 100, 100, H_qp);
     qpOASES::DenseMatrix *Ad = new qpOASES::DenseMatrix(200, 100, 100, Aineq_qp);
 
-    // Solve first QP.
+    // Solve first QP (which initializes QProblem object)
     Qp.init(Hsd, g_qp, Ad, Ulb_qp, Uub_qp, NULL, bineq_qp, nWSR);
 }
-

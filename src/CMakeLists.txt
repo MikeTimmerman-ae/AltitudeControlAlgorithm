@@ -50,3 +50,20 @@ target_link_directories(rbf
 )
 
 target_link_libraries(rbf eigen)
+
+
+# Add helpers.cpp
+
+add_library(helpers helpers.cpp)
+
+target_include_directories(helpers
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/qpOASES/include
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_directories(helpers
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/qpOASES
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_libraries(helpers eigen qpOASES)
