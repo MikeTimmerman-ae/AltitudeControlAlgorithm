@@ -34,7 +34,7 @@ class controller
         qpOASES::real_t H_qp[100*100];
         
         // Private class method
-        void initialize();
+        void initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, double QN);
     public:
         // Constructors
         controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &C, double d_par, double Q_par, double R, double QN, Matrix<double, P::n_states, P::n_prediction> &Xub_par,
