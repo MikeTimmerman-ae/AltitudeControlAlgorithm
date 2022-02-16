@@ -15,7 +15,7 @@
 using namespace std;
 using namespace Eigen;
 
-rbf::rbf(MatrixXd &cent, string rbf_typeP, int epsP, int kP) {
+rbf::rbf(MatrixXf &cent, string rbf_typeP, int epsP, int kP) {
     // Initialize the lifting function
     C = cent;
     Nrbf = cent.cols();
@@ -23,17 +23,17 @@ rbf::rbf(MatrixXd &cent, string rbf_typeP, int epsP, int kP) {
     eps = epsP; k = kP;
 }
 
-VectorXd rbf::lift(VectorXd &x) {
+VectorXf rbf::lift(VectorXf &x) {
     // Create lifted matrix
     int Nstate = x.rows();
-    VectorXd Y(Nrbf + Nstate, 1);
-    
+    VectorXf Y(Nrbf + Nstate, 1);
+
     // Populate lifted data matrix
     for (int i = Nstate; i < Nrbf + Nstate; ++i) {
-        MatrixXd Cstate = C(seq(0, Nstate-1), i-3);
-        double r_squared = (x-Cstate).dot(x-Cstate);
-        double y;
-    
+        MatrixXf Cstate = C(seq(0, Nstate-1), i-Nstate);
+        float r_squared = (x-Cstate).dot(x-Cstate);
+        float y;
+
         if (rbf_type == "thinplate") {
             y = r_squared*log(sqrt(r_squared));
         } else if (rbf_type == "gauss") {

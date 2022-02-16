@@ -18,12 +18,12 @@ class rbf
 {   
     private:
         // Private class members
-        MatrixXd C;
+        MatrixXf C;
         string rbf_type;
         int eps, k, Nrbf;
     public:
         // Constructor
-        rbf(MatrixXd &cent, string rbf_typeP, int epsP = 1, int kP = 1);
+        rbf(MatrixXf &cent, string rbf_typeP, int epsP = 1, int kP = 1);
         // Class methods
-        VectorXd lift(VectorXd &x);
+        VectorXf lift(VectorXf &x);
 };

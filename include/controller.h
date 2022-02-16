@@ -23,31 +23,31 @@ class controller
     private:
         // Private class members
         int Np, p, n, m;
-        double Q, d;
-        MatrixXd Ab;
-        MatrixXd Xub;
-        MatrixXd Ulb, Uub;
-        VectorXd ulin;
-        MatrixXd M1, M2;
-        SparseMatrix<double> C;
+        float Q, d;
+        MatrixXf Ab;
+        MatrixXf Xub;
+        MatrixXf Ulb, Uub;
+        VectorXf ulin;
+        MatrixXf M1, M2;
+        SparseMatrix<float> C;
         qpOASES::QProblem Qp; 
         qpOASES::real_t H_qp[100*100];
         
         // Private class method
-        void initialize(MatrixXd &A, MatrixXd &B, MatrixXd &qlin, double R, double QN);
+        void initialize(MatrixXf &A, MatrixXf &B, MatrixXf &qlin, float R, float QN);
     public:
         // Constructors
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, Matrix<double, P::n_states_lift * P::n_prediction, 1> &Xub_par,
-            Matrix<double, P::n_control_input * P::n_prediction, 1> &Ulb_par, Matrix<double, P::n_control_input * P::n_prediction, 1> &Uub_par,
-            Matrix<double, P::n_control_input * P::n_prediction, 1> &ulin_par, Matrix<double, P::n_output * P::n_prediction , 1> &qlin);
+        controller(MatrixXf &A, MatrixXf &B, SparseMatrix<float> &Cpar, float d_par, float Q_par, float R, float QN, Matrix<float, P::n_states_lift * P::n_prediction, 1> &Xub_par,
+            Matrix<float, P::n_control_input * P::n_prediction, 1> &Ulb_par, Matrix<float, P::n_control_input * P::n_prediction, 1> &Uub_par,
+            Matrix<float, P::n_control_input * P::n_prediction, 1> &ulin_par, Matrix<float, P::n_output * P::n_prediction , 1> &qlin);
         
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, int Npred, Matrix<double, P::n_states_lift, 1> &Xub_par,
-            Matrix<double, P::n_control_input, 1> &Ulb_par, Matrix<double, P::n_control_input, 1> &Uub_par,
-            Matrix<double, P::n_control_input, 1> &ulin_par, Matrix<double, P::n_output, 1> &qlin);
+        controller(MatrixXf &A, MatrixXf &B, SparseMatrix<float> &Cpar, float d_par, float Q_par, float R, float QN, int Npred, Matrix<float, P::n_states_lift, 1> &Xub_par,
+            Matrix<float, P::n_control_input, 1> &Ulb_par, Matrix<float, P::n_control_input, 1> &Uub_par,
+            Matrix<float, P::n_control_input, 1> &ulin_par, Matrix<float, P::n_output, 1> &qlin);
         
-        controller(MatrixXd &A, MatrixXd &B, SparseMatrix<double> &Cpar, double d_par, double Q_par, double R, double QN, int Npred, double Xub_par,
-            double Ulb_par, double Uub_par, double ulin_par, double qlin_par);
+        controller(MatrixXf &A, MatrixXf &B, SparseMatrix<float> &Cpar, float d_par, float Q_par, float R, float QN, int Npred, float Xub_par,
+            float Ulb_par, float Uub_par, float ulin_par, float qlin_par);
         
         // Public class method
-        double getControlInput(VectorXd &x0, double yrr);
+        float getControlInput(VectorXf &x0, float yrr);
 };

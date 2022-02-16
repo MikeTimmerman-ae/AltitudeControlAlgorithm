@@ -15,10 +15,10 @@ using namespace Eigen;
 
 dynamics::dynamics() {
     // Initialize system dynamics properties
-    dt = 0.01;
+    dt = 0.02;
     t = 0;
     n_states = 2;
-    state = VectorXd::Zero(2,1);
+    state = VectorXf::Zero(2,1);
 
     // Standard rocket parameters
     g = 9.81;
@@ -31,14 +31,14 @@ dynamics::dynamics() {
     thrust = 2501.8;
 
     // Initialize private data members
-    k1 = VectorXd::Zero(2,1);
-    k2 = VectorXd::Zero(2,1);
-    k3 = VectorXd::Zero(2,1);
-    k4 = VectorXd::Zero(2,1);
-    state_derivative = VectorXd::Zero(2,1);
+    k1 = VectorXf::Zero(2,1);
+    k2 = VectorXf::Zero(2,1);
+    k3 = VectorXf::Zero(2,1);
+    k4 = VectorXf::Zero(2,1);
+    state_derivative = VectorXf::Zero(2,1);
 }
 
-dynamics::dynamics(int n, VectorXd initState, double dtP, double t_initial) {
+dynamics::dynamics(int n, VectorXf initState, float dtP, float t_initial) {
     // Initialize system dynamics properties
     dt = dtP;
     t = t_initial;
@@ -56,21 +56,21 @@ dynamics::dynamics(int n, VectorXd initState, double dtP, double t_initial) {
     thrust = 2501.8;
 
     // Initialize private data members
-    k1 = VectorXd::Zero(n,1);
-    k2 = VectorXd::Zero(n,1);
-    k3 = VectorXd::Zero(n,1);
-    k4 = VectorXd::Zero(n,1);
-    state_derivative = VectorXd::Zero(n,1);
+    k1 = VectorXf::Zero(n,1);
+    k2 = VectorXf::Zero(n,1);
+    k3 = VectorXf::Zero(n,1);
+    k4 = VectorXf::Zero(n,1);
+    state_derivative = VectorXf::Zero(n,1);
 }
 
-VectorXd dynamics::rocket_dynamics(double tEv, VectorXd stateEv, double u) {
+VectorXf dynamics::rocket_dynamics(float tEv, VectorXf stateEv, float u) {
     /*
-    t - double representing the independent variable of the DE
+    t - float representing the independent variable of the DE
     y - 1-D array representing the state variable of the DE
-    u - double representing the control input of the DE
+    u - float representing the control input of the DE
     */
-    double current_thrust = (tEv < t_burn) ? thrust : 0;
-    double density = density_sea * exp(-stateEv[0] / 8800.0);
+    float current_thrust = (tEv < t_burn) ? thrust : 0;
+    float density = density_sea * exp(-stateEv[0] / 8800.0);
 
     state_derivative[0] = stateEv[1];
     state_derivative[1] = -g - 1.0/2.0 * density * pow(stateEv[1], 2) * (A + u*A_flap) * Cd / mass + current_thrust / mass;
@@ -78,7 +78,7 @@ VectorXd dynamics::rocket_dynamics(double tEv, VectorXd stateEv, double u) {
     return state_derivative;
 }
 
-void dynamics::update_state(double u) {
+void dynamics::update_state(float u) {
     // Evaluation at start of interval
     k1 = rocket_dynamics(t, state, u);
 

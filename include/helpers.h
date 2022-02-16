@@ -16,10 +16,10 @@
 using namespace Eigen;            // using namespace
 using namespace std;
 
-MatrixXd loadFile(string FileName, int row, int col);
+MatrixXf loadFile(string FileName, int row, int col);
 
-void saveToFile(MatrixXd &data, int rows, int cols, string FileName);
+void saveToFile(MatrixXf &data, int rows, int cols, string FileName);
 
-vector<int> NotNanIndex(MatrixXd &A, int n);
+vector<int> NotNanIndex(MatrixXf &A, int n);
 
-void convertMatrixtoQpArray(qpOASES::real_t *qpArray, MatrixXd &Matrix, int m, int n);
+void convertMatrixtoQpArray(qpOASES::real_t *qpArray, MatrixXf &Matrix, int m, int n);

@@ -13,32 +13,32 @@ using namespace Eigen;              // using namespace of module
 class dynamics
 {
     private:
-        VectorXd k1;
-        VectorXd k2;
-        VectorXd k3;
-        VectorXd k4;
-        VectorXd state_derivative;
-        VectorXd rocket_dynamics(double t, VectorXd stateEv, double u);
+        VectorXf k1;
+        VectorXf k2;
+        VectorXf k3;
+        VectorXf k4;
+        VectorXf state_derivative;
+        VectorXf rocket_dynamics(float t, VectorXf stateEv, float u);
     public:
         // Public class members
-        double dt;
-        double t;
+        float dt;
+        float t;
         int n_states;
-        double g;
-        double density_sea;
-        double A;
-        double A_flap;
-        double Cd;
-        double mass;
-        double t_burn;
-        double thrust;
-        VectorXd state;
+        float g;
+        float density_sea;
+        float A;
+        float A_flap;
+        float Cd;
+        float mass;
+        float t_burn;
+        float thrust;
+        VectorXf state;
         
         // Constructor
         dynamics();
-        dynamics(int n, VectorXd initState, double dtP, double t_initial);
+        dynamics(int n, VectorXf initState, float dtP, float t_initial);
         
         // Class methods
-        void update_state(double u);
+        void update_state(float u);
 };
 
