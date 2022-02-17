@@ -18,6 +18,7 @@
 #include <Eigen/SparseCore>
 
 #include "include/controller.h"     // #include src code
+#include "include/controllerB.h"
 #include "include/dynamics.h"
 #include "include/rbf.h"
 #include "include/helpers.h"

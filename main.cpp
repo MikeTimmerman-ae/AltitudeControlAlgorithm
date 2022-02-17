@@ -26,7 +26,8 @@ int main(int argc, char const *argv[])
 
     int Npred = 100;
 
-    float Xub = 8000;
+    // float Xub = 8000;
+    // float Xlb = 0;
 
     float Ulb = 0; 
     float Uub = 1; 
@@ -34,7 +35,7 @@ int main(int argc, char const *argv[])
     float ulin = 0;
     float qlin = 0;
 
-    controller MyController(A, B, C, d, Q, R, Q, Npred, Xub, Ulb, Uub, ulin, qlin);
+    controllerB MyController(A, B, C, d, Q, R, Q, Npred, Ulb, Uub, ulin, qlin);
 
     /* Closed-loop simulation */
     int Nsim = 1700;
@@ -61,7 +62,8 @@ int main(int argc, char const *argv[])
         float yr = yrr(1, i);
 
         // Simulate closed loop feedback control
-        xlift = liftFun.lift(MyRocket.state);
+        VectorXf state = MyRocket.state;
+        xlift = liftFun.lift(state);
         float u = MyController.getControlInput(xlift, yr);
         MyRocket.update_state(u);
         qpOASES::real_t toc = qpOASES::getCPUtime();
@@ -92,4 +94,4 @@ int main(int argc, char const *argv[])
     saveToFile(memoryUse, memoryUse.rows(), memoryUse.cols(), "../data/memoryUse.csv");
 
     return 0;
-}
+}   
