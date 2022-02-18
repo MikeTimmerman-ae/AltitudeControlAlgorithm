@@ -82,3 +82,20 @@ target_link_directories(helpers
 )
 
 target_link_libraries(helpers eigen qpOASES)
+
+
+# Add simulate.cpp
+
+add_library(simulate simulate.cpp)
+
+target_include_directories(simulate
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/qpOASES/include
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_directories(simulate
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/qpOASES
+    PUBLIC ${CMAKE_SOURCE_DIR}/libraries/eigen
+)
+
+target_link_libraries(simulate eigen qpOASES)

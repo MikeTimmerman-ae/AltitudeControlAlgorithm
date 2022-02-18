@@ -23,6 +23,7 @@
 #include "include/rbf.h"
 #include "include/helpers.h"
 #include "include/parameters.h"
+#include "include/simulate.h"
 
 using namespace std;                // using namespaces
 using namespace Eigen;
