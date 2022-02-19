@@ -33,7 +33,7 @@ foo@bar:~$ git submodule add https://gitlab.com/libeigen/eigen.git libraries/eig
 ```
 9. Select a kit for compilation in the blue status bar at the bottom of vs code
 10. Configure the build folder by pressing the play button in the blue status bar at the bottom of vs code
-![image info](./data/vscode status bar.png)
+![image info](./data/vscodestatusbar.png)
 11. Select the executable to execute: ${working_directory}\build\ControlSoftware.exe
 12. (Optional) Replace minimum required version of cmake in libraries\qpOASES\CMakeLists.txt to 'VERSION 3.0'
 13. Run code by again clicking the play button at the bottom of vs code
